@@ -280,18 +280,193 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Funções auxiliares para criar as colunas
 function criarColunaRotas() {
-    // Implementar criação da coluna de rotas
-    // ... (código para criar a coluna de rotas)
+    const coluna = document.createElement('div');
+    coluna.className = 'bg-white rounded-2xl shadow-lg p-6';
+    
+    const titulo = document.createElement('h2');
+    titulo.className = 'text-xl font-semibold text-gray-800 mb-4';
+    titulo.textContent = 'Rotas';
+    coluna.appendChild(titulo);
+
+    const lista = document.createElement('div');
+    lista.className = 'space-y-4';
+
+    if (dados_summary && dados_summary.routes) {
+        dados_summary.routes.forEach((rota, index) => {
+            const card = document.createElement('div');
+            card.className = 'bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors cursor-pointer';
+            card.onclick = () => showGanttChart(index);
+
+            const header = document.createElement('div');
+            header.className = 'flex justify-between items-center mb-2';
+            
+            const rotaTitulo = document.createElement('h3');
+            rotaTitulo.className = 'font-medium text-gray-700';
+            rotaTitulo.textContent = `Rota ${index + 1}`;
+            
+            const expandirBtn = document.createElement('button');
+            expandirBtn.className = 'text-gray-500 hover:text-gray-700';
+            expandirBtn.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>';
+            
+            header.appendChild(rotaTitulo);
+            header.appendChild(expandirBtn);
+
+            const detalhes = document.createElement('div');
+            detalhes.className = 'text-sm text-gray-600 space-y-1';
+            
+            const pedidos = document.createElement('p');
+            pedidos.textContent = `Pedidos: ${rota.orders.length}`;
+            
+            const distancia = document.createElement('p');
+            distancia.textContent = `Distância: ${rota.distance.toFixed(2)} km`;
+            
+            const tempo = document.createElement('p');
+            tempo.textContent = `Tempo: ${rota.duration} minutos`;
+            
+            detalhes.appendChild(pedidos);
+            detalhes.appendChild(distancia);
+            detalhes.appendChild(tempo);
+
+            card.appendChild(header);
+            card.appendChild(detalhes);
+            lista.appendChild(card);
+        });
+    } else {
+        const mensagem = document.createElement('p');
+        mensagem.className = 'text-gray-500 text-center';
+        mensagem.textContent = 'Nenhuma rota encontrada';
+        lista.appendChild(mensagem);
+    }
+
+    coluna.appendChild(lista);
+    return coluna;
 }
 
 function criarColunaPedidos() {
-    // Implementar criação da coluna de pedidos
-    // ... (código para criar a coluna de pedidos)
+    const coluna = document.createElement('div');
+    coluna.className = 'bg-white rounded-2xl shadow-lg p-6';
+    
+    const titulo = document.createElement('h2');
+    titulo.className = 'text-xl font-semibold text-gray-800 mb-4';
+    titulo.textContent = 'Pedidos em Rota';
+    coluna.appendChild(titulo);
+
+    const lista = document.createElement('div');
+    lista.className = 'space-y-4';
+
+    if (df_details) {
+        const pedidosEmRota = df_details.filter(row => row.orderId !== '0');
+        pedidosEmRota.forEach(pedido => {
+            const card = document.createElement('div');
+            card.className = 'bg-gray-50 rounded-lg p-4';
+
+            const header = document.createElement('div');
+            header.className = 'flex justify-between items-center mb-2';
+            
+            const pedidoTitulo = document.createElement('h3');
+            pedidoTitulo.className = 'font-medium text-gray-700';
+            pedidoTitulo.textContent = `Pedido ${pedido.orderId}`;
+            
+            const tipo = document.createElement('span');
+            tipo.className = 'text-sm text-gray-500';
+            tipo.textContent = pedido.type === '1' ? 'Coleta' : 'Entrega';
+            
+            header.appendChild(pedidoTitulo);
+            header.appendChild(tipo);
+
+            const detalhes = document.createElement('div');
+            detalhes.className = 'text-sm text-gray-600 space-y-1';
+            
+            const horario = document.createElement('p');
+            horario.textContent = `Horário: ${pedido.nodeDayHourRange}`;
+            
+            const rota = document.createElement('p');
+            rota.textContent = `Rota: ${pedido.routeId}`;
+            
+            detalhes.appendChild(horario);
+            detalhes.appendChild(rota);
+
+            card.appendChild(header);
+            card.appendChild(detalhes);
+            lista.appendChild(card);
+        });
+    } else {
+        const mensagem = document.createElement('p');
+        mensagem.className = 'text-gray-500 text-center';
+        mensagem.textContent = 'Nenhum pedido em rota encontrado';
+        lista.appendChild(mensagem);
+    }
+
+    coluna.appendChild(lista);
+    return coluna;
 }
 
 function criarColunaPedidosForaRota() {
-    // Implementar criação da coluna de pedidos fora de rota
-    // ... (código para criar a coluna de pedidos fora de rota)
+    const coluna = document.createElement('div');
+    coluna.className = 'bg-white rounded-2xl shadow-lg p-6';
+    
+    const titulo = document.createElement('h2');
+    titulo.className = 'text-xl font-semibold text-gray-800 mb-4';
+    titulo.textContent = 'Pedidos Fora de Rota';
+    coluna.appendChild(titulo);
+
+    const lista = document.createElement('div');
+    lista.className = 'space-y-4';
+
+    if (dados_transit && dados_transit.orders) {
+        const pedidosForaRota = dados_transit.orders.filter(pedido => {
+            return !df_details.some(row => row.orderId === pedido.orderId);
+        });
+
+        pedidosForaRota.forEach(pedido => {
+            const card = document.createElement('div');
+            card.className = 'bg-gray-50 rounded-lg p-4';
+
+            const header = document.createElement('div');
+            header.className = 'flex justify-between items-center mb-2';
+            
+            const pedidoTitulo = document.createElement('h3');
+            pedidoTitulo.className = 'font-medium text-gray-700';
+            pedidoTitulo.textContent = `Pedido ${pedido.orderId}`;
+            
+            const tipo = document.createElement('span');
+            tipo.className = 'text-sm text-gray-500';
+            tipo.textContent = pedido.type === '1' ? 'Coleta' : 'Entrega';
+            
+            header.appendChild(pedidoTitulo);
+            header.appendChild(tipo);
+
+            const detalhes = document.createElement('div');
+            detalhes.className = 'text-sm text-gray-600 space-y-1';
+            
+            if (janelas_tempo[pedido.orderId]) {
+                const janela = document.createElement('p');
+                janela.textContent = `Janela de Tempo: ${janelas_tempo[pedido.orderId].delivery || janelas_tempo[pedido.orderId].pickup || 'Não definida'}`;
+                detalhes.appendChild(janela);
+            }
+            
+            const peso = document.createElement('p');
+            peso.textContent = `Peso: ${pedido.weight || 0} kg`;
+            
+            const volume = document.createElement('p');
+            volume.textContent = `Volume: ${pedido.volume || 0} m³`;
+            
+            detalhes.appendChild(peso);
+            detalhes.appendChild(volume);
+
+            card.appendChild(header);
+            card.appendChild(detalhes);
+            lista.appendChild(card);
+        });
+    } else {
+        const mensagem = document.createElement('p');
+        mensagem.className = 'text-gray-500 text-center';
+        mensagem.textContent = 'Nenhum pedido fora de rota encontrado';
+        lista.appendChild(mensagem);
+    }
+
+    coluna.appendChild(lista);
+    return coluna;
 }
 
 // Funções do modal
