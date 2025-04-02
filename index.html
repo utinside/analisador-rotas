@@ -1,78 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Analisador de Rotas</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <style type="text/css">
-        .tooltip {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-        }
-        .tooltip:before {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 4px 8px;
-            background-color: #1f2937;
-            color: white;
-            border-radius: 4px;
-            font-size: 12px;
-            white-space: nowrap;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.2s;
-            z-index: 10;
-        }
-        .tooltip:hover:before {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        /* Estilos para o modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 50;
-            overflow: auto;
-        }
-
-        .modal-content {
-            background-color: white;
-            margin: 5% auto;
-            padding: 20px;
-            width: 90%;
-            max-width: 1200px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .close:hover {
-            color: black;
-        }
-
-        /* Estilo para o gráfico Gantt */
-        #gantt-chart {
-            width: 100%;
-            height: 600px;
-        }
-    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body class="bg-gray-100 font-['Inter']">
     <!-- Modal para o gráfico Gantt -->
@@ -86,7 +22,7 @@
 
     <div class="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto space-y-8">
-            <!-- Resumo/Visão Geral -->
+            <!-- Área de Upload -->
             <div class="bg-white rounded-2xl shadow-lg p-6">
                 <div class="border-b pb-4">
                     <h1 class="text-3xl font-semibold text-gray-800">Analisador de Rotas</h1>
@@ -107,13 +43,13 @@
                 </div>
             </div>
 
-            <!-- Container para as três colunas -->
-            <div id="analysis-container" class="hidden">
-                <!-- O conteúdo será inserido dinamicamente via JavaScript -->
+            <!-- Container para as três colunas (será preenchido via JavaScript) -->
+            <div id="content-container" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- O conteúdo será inserido aqui via JavaScript -->
             </div>
         </div>
     </div>
 
-    <script src="js/script.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html> 

@@ -1,92 +1,66 @@
 # Analisador de Rotas
 
-Este é um projeto para análise de rotas de entrega, desenvolvido para ser hospedado no GitHub Pages. O projeto permite que você faça upload de arquivos ZIP contendo dados de rotas e visualize informações detalhadas sobre as entregas, incluindo:
-
-- Visão geral das rotas
-- Detalhes dos pedidos
-- Pedidos fora de rota
-- Gráficos Gantt para visualização do cronograma
-
-## Como Usar
-
-1. Acesse a página do projeto no GitHub Pages
-2. Faça upload de um arquivo ZIP contendo os seguintes arquivos:
-   - `*_transitData.json`
-   - `*_routes_details_transitData.csv`
-   - `*_routes_summary_transitData.json`
-
-3. O sistema irá processar automaticamente os arquivos e exibir:
-   - Uma visão geral com estatísticas
-   - Detalhes de cada rota
-   - Informações sobre pedidos
-   - Gráficos Gantt para visualização do cronograma
+Uma aplicação web para análise de rotas de entrega e coleta, desenvolvida em HTML, CSS e JavaScript.
 
 ## Funcionalidades
 
-### Visão Rotas
-- Número total de rotas
-- Detalhes de cada rota incluindo:
-  - Capacidade de peso
-  - Capacidade de volume
-  - Tempo de trabalho
-  - Horários de início e fim
-  - Gráfico Gantt interativo
+- Upload de arquivos ZIP contendo dados de rotas
+- Visualização de rotas com métricas de peso, volume e tempo
+- Gráfico Gantt para visualização do cronograma
+- Análise de pedidos em rota e fora de rota
+- Interface responsiva e moderna
 
-### Visão Pedidos
-- Lista detalhada de todos os pedidos
-- Informações por pedido:
-  - Peso
-  - Volume
-  - Janelas de tempo
-  - Tempos de processamento
+## Requisitos
 
-### Pedidos Fora de Rota
-- Lista de pedidos não incluídos em rotas
-- Alertas para possíveis problemas
-- Detalhes completos de cada pedido
+- Navegador web moderno com suporte a JavaScript ES6+
+- Conexão com internet (para carregar as bibliotecas externas)
+
+## Como Usar
+
+1. Acesse a aplicação através do navegador
+2. Faça upload do arquivo ZIP contendo os dados de análise
+3. A interface será atualizada automaticamente com as informações
+4. Clique nas rotas para visualizar o gráfico Gantt
+5. Use os botões de expandir/recolher para ver mais detalhes dos pedidos
+
+## Estrutura do Arquivo ZIP
+
+O arquivo ZIP deve conter os seguintes arquivos:
+- `*_transitData.json`
+- `*_routes_details_transitData.csv`
+- `*_routes_summary_transitData.json`
+
+## Hospedagem
+
+Esta aplicação pode ser hospedada em várias plataformas gratuitas:
+
+### GitHub Pages (Recomendado)
+1. Crie um repositório no GitHub
+2. Faça upload dos arquivos
+3. Ative o GitHub Pages nas configurações do repositório
+
+### Netlify
+1. Crie uma conta no Netlify
+2. Conecte com seu repositório GitHub
+3. Configure o deploy automático
+
+### Vercel
+1. Crie uma conta no Vercel
+2. Importe seu repositório
+3. Configure o deploy automático
 
 ## Tecnologias Utilizadas
 
 - HTML5
-- CSS3 (Tailwind CSS)
-- JavaScript (Vanilla)
+- CSS3 (com Tailwind CSS)
+- JavaScript (ES6+)
 - Plotly.js para gráficos
-- Papa Parse para processamento de CSV
 - JSZip para processamento de arquivos ZIP
 
-## Como Desenvolver Localmente
+## Contribuição
 
-1. Clone o repositório
-2. Abra o arquivo `index.html` em um navegador moderno
-3. Para desenvolvimento, recomenda-se usar um servidor local para evitar problemas de CORS
-
-## Estrutura do Projeto
-
-```
-.
-├── index.html          # Página principal
-├── js/
-│   └── script.js      # Lógica principal do aplicativo
-└── README.md          # Este arquivo
-```
-
-## Requisitos do Navegador
-
-- Navegador moderno com suporte a JavaScript ES6+
-- Suporte a drag and drop de arquivos
-- JavaScript habilitado
-- Cookies habilitados (para algumas funcionalidades)
-
-## Contribuindo
-
-Contribuições são bem-vindas! Por favor, sinta-se à vontade para:
-
-1. Fazer um fork do projeto
-2. Criar uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abrir um Pull Request
+Contribuições são bem-vindas! Por favor, sinta-se à vontade para submeter pull requests.
 
 ## Licença
 
-Este projeto está licenciado sob a Licença MIT - veja o arquivo LICENSE para detalhes. 
+Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes. 
