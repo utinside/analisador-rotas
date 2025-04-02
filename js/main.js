@@ -5,6 +5,23 @@ let dados_summary = null;
 let janelas_tempo = {};
 let route_gantt_data = {};
 
+// Função para mostrar/esconder a barra de progresso
+function toggleProgressBar(show) {
+    const progressContainer = document.getElementById('progress-container');
+    progressContainer.classList.toggle('hidden', !show);
+}
+
+// Função para atualizar a barra de progresso
+function updateProgress(percentage, text) {
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+    const progressPercentage = document.getElementById('progress-percentage');
+    
+    progressBar.style.width = `${percentage}%`;
+    progressText.textContent = text;
+    progressPercentage.textContent = `${percentage}%`;
+}
+
 // Função para mostrar mensagens na interface
 function showMessage(message, type = 'error') {
     const messageArea = document.getElementById('message-area');
@@ -26,6 +43,8 @@ function showMessage(message, type = 'error') {
 async function processarArquivoZip(file) {
     try {
         console.log('Iniciando processamento do arquivo:', file.name);
+        toggleProgressBar(true);
+        updateProgress(0, 'Iniciando processamento...');
         
         // Verificar se o arquivo é um ZIP
         if (!file.name.toLowerCase().endsWith('.zip')) {
@@ -37,10 +56,12 @@ async function processarArquivoZip(file) {
             throw new Error('O arquivo ZIP está vazio');
         }
 
+        updateProgress(10, 'Carregando arquivo ZIP...');
         console.log('Carregando arquivo ZIP...');
         const zip = await JSZip.loadAsync(file);
         
         console.log('Arquivos encontrados no ZIP:', Object.keys(zip.files));
+        updateProgress(20, 'Analisando arquivos do ZIP...');
         
         const fileContents = {};
         
@@ -57,8 +78,11 @@ async function processarArquivoZip(file) {
         }
 
         // Encontrar os arquivos correspondentes
+        let progressStep = 30;
         for (const [key, pattern] of Object.entries(filePatterns)) {
             console.log(`Procurando arquivo com padrão: ${pattern}`);
+            updateProgress(progressStep, `Procurando arquivo ${pattern}...`);
+            
             const matchingFiles = Object.keys(zip.files).filter(f => f.toLowerCase().endsWith(pattern.toLowerCase()));
             console.log(`Arquivos encontrados para ${pattern}:`, matchingFiles);
             
@@ -69,11 +93,13 @@ async function processarArquivoZip(file) {
             } else {
                 throw new Error(`Arquivo com padrão ${pattern} não encontrado no ZIP. Verifique se o arquivo contém todos os arquivos necessários.`);
             }
+            progressStep += 20;
         }
 
         // Processar os arquivos
         try {
             console.log('Processando arquivo transitData.json...');
+            updateProgress(70, 'Processando arquivo JSON de trânsito...');
             dados_transit = JSON.parse(fileContents['transit']);
         } catch (e) {
             console.error('Erro ao processar transitData.json:', e);
@@ -82,6 +108,7 @@ async function processarArquivoZip(file) {
 
         try {
             console.log('Processando arquivo CSV...');
+            updateProgress(80, 'Processando arquivo CSV...');
             df_details = await processarCSV(fileContents['details']);
         } catch (e) {
             console.error('Erro ao processar CSV:', e);
@@ -90,6 +117,7 @@ async function processarArquivoZip(file) {
 
         try {
             console.log('Processando arquivo summary...');
+            updateProgress(90, 'Processando arquivo JSON de sumário...');
             dados_summary = JSON.parse(fileContents['summary']);
         } catch (e) {
             console.error('Erro ao processar summary:', e);
@@ -97,15 +125,26 @@ async function processarArquivoZip(file) {
         }
 
         console.log('Processando dados...');
+        updateProgress(95, 'Processando dados...');
         processarDados();
+        
         console.log('Atualizando interface...');
+        updateProgress(100, 'Atualizando interface...');
         atualizarInterface();
         
         showMessage('Arquivo processado com sucesso!', 'success');
+        
+        // Esconder a barra de progresso após 2 segundos
+        setTimeout(() => {
+            toggleProgressBar(false);
+            updateProgress(0, '');
+        }, 2000);
 
     } catch (error) {
         console.error('Erro ao processar arquivo:', error);
         showMessage(error.message);
+        toggleProgressBar(false);
+        updateProgress(0, '');
     }
 }
 
