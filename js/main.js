@@ -201,20 +201,31 @@ function prepareGanttData(route_id) {
     const gantt_data = [];
 
     route_data.forEach(row => {
-        if (row.type === '0') return;
+        // Verificar se o tipo é válido
+        if (!row.type || row.type === '0') return;
 
-        const time_str = row.nodeDayHourRange
-            .replace("('", "")
-            .replace("')", "")
-            .replace("', '", " - ");
+        // Verificar se nodeDayHourRange existe e é uma string
+        if (!row.nodeDayHourRange || typeof row.nodeDayHourRange !== 'string') {
+            console.warn(`Dados inválidos para o pedido ${row.orderId}: nodeDayHourRange não encontrado ou inválido`);
+            return;
+        }
 
-        const activity_type = row.type === '1' ? "Coleta" : "Entrega";
+        try {
+            const time_str = row.nodeDayHourRange
+                .replace("('", "")
+                .replace("')", "")
+                .replace("', '", " - ");
 
-        gantt_data.push({
-            "Task": `Pedido ${row.orderId}`,
-            "Start": time_str,
-            "Resource": activity_type
-        });
+            const activity_type = row.type === '1' ? "Coleta" : "Entrega";
+
+            gantt_data.push({
+                "Task": `Pedido ${row.orderId || 'Sem ID'}`,
+                "Start": time_str,
+                "Resource": activity_type
+            });
+        } catch (error) {
+            console.error(`Erro ao processar dados do pedido ${row.orderId}:`, error);
+        }
     });
 
     return gantt_data;
